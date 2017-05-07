@@ -35,25 +35,21 @@ import (
 
 var cfgFile string
 
+// GITCOMMIT The gitcommit the application was built from
+var GITCOMMIT string
+
 // VERSION The version of the application
 var VERSION string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "annotate-influxdb",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "A simple command line tool to send annotation data to InfluxDB",
+	Long: ``,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Inside rootCmd PreRun with args: %v\n", args)
 		rootCmdPreRun()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Inside rootCmd Run with args: %v\n", args)
 		rootCmdRun()
 	},
 }
@@ -73,9 +69,9 @@ func init() {
 	// General Flags
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.annotate-influxdb.yaml)")
 	
-	// Logging Flags
-	//RootCmd.PersistentFlags().String("loglevel", "info", "The level of logging. Acceptable values: debug, info, warn, error, fatal, panic.")
-	//viper.BindPFlag("loglevel", RootCmd.PersistentFlags().Lookup("loglevel"))
+	// Version Flag
+	RootCmd.PersistentFlags().Bool("version", true, "Use Viper for configuration")
+	viper.BindPFlag("version", RootCmd.PersistentFlags().Lookup("version"))
 
 	// InfluxDB Related Flags
 	RootCmd.PersistentFlags().String("url", "http://localhost:8086", "The URL to the InfluxDB server.")
@@ -83,6 +79,9 @@ func init() {
 
 	RootCmd.PersistentFlags().String("database", "", "The name of the database to write to.")
 	viper.BindPFlag("influxdb.database", RootCmd.PersistentFlags().Lookup("database"))
+
+	RootCmd.PersistentFlags().String("description", "", "A description for the annotation.")
+	viper.BindPFlag("influxdb.description", RootCmd.PersistentFlags().Lookup("description"))
 
 	RootCmd.PersistentFlags().String("measurement", "events", "The name of the measurement to write to.")
 	viper.BindPFlag("influxdb.measurement", RootCmd.PersistentFlags().Lookup("measurement"))
@@ -93,8 +92,7 @@ func init() {
 	RootCmd.PersistentFlags().StringSlice("tag", []string{}, "A tag for the annotation.")
 	viper.BindPFlag("influxdb.tags", RootCmd.PersistentFlags().Lookup("tag"))
 
-	RootCmd.PersistentFlags().String("description", "", "A description for the annotation.")
-	viper.BindPFlag("influxdb.description", RootCmd.PersistentFlags().Lookup("description"))
+	
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -136,6 +134,12 @@ func GetInfluxDBClient(host string) (influxdb.Client, error) {
 
 // rootCmdPreRun
 func rootCmdPreRun() {
+	if viper.IsSet("version") {
+		fmt.Printf("%s-%s\n", VERSION, GITCOMMIT)
+		os.Exit(0)
+	}
+
+
 	// Make sure the required arguments are provided
 	if viper.IsSet("influxdb.url") && viper.GetString("influxdb.url") == "" {
 		log.Fatal("--url is a required parameter.")
