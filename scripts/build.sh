@@ -105,7 +105,7 @@ if [[ "$PACKAGE" != "" ]]; then
     OSARCH=$(basename ${PLATFORM})
     echo "==> Packaging ${OSARCH}"
     pushd $PLATFORM >/dev/null 2>&1
-    tar czvf ../${OSARCH}.tar.gz ./* >/dev/null
+    tar czvf ../${PACKAGE}-${OSARCH}.tar.gz ./* >/dev/null
     popd >/dev/null 2>&1
   done
 
@@ -113,7 +113,7 @@ if [[ "$PACKAGE" != "" ]]; then
   for PLATFORM in $(find ./pkg -mindepth 1 -maxdepth 1 -type f); do
     OSARCH=$(basename ${PLATFORM})
     # Need to make this portable
-    shasum -a 256 "./pkg/${OSARCH}" >> ./pkg/SHASUM256.txt
+    shasum -a 256 "./pkg/${PACKAGE}-${OSARCH}" >> ./pkg/SHASUM256.txt
   done
 
   cat ./pkg/SHASUM256.txt
