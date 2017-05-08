@@ -52,7 +52,7 @@ targets="$LOCAL_TARGET"
 # If we are building for release change targets based off of environment
 if [[ "$TARGETS" == "release" ]]; then
   if [[ $(uname) == "Linux" ]]; then
-    targets="darwin_amd64 linux_amd64 linux_amd64-lxc windows_386 windows_amd64"
+    targets="darwin_amd64 linux_amd64 linux_amd64-lx windows_amd64"
   elif [[ $(uname) == "Darwin" ]]; then
     targets="darwin_amd64 linux_amd64 linux_amd64-lxc"
   else
@@ -81,11 +81,6 @@ for target in $targets; do
       echo "==> Building linux amd64 with lxc..."
       CGO_ENABLED=1 GOOS="linux" GOARCH="amd64" \
         go build -ldflags "$STATIC $EXTLDFLAGS" -o "pkg/linux_amd64-lxc/$PACKAGE" -tags "lxc"
-      ;;
-    "windows_386")
-      echo "==> Building windows 386..."
-      CGO_ENABLED=1 GOOS="windows" GOARCH="386" CXX="i686-w64-mingw32-g++" CC="i686-w64-mingw32-gcc" \
-        go build -ldflags "$STATIC $EXTLDFLAGS" -o "pkg/windows_386/$PACKAGE.exe"
       ;;
     "windows_amd64")
       echo "==> Building windows amd64..."
@@ -120,9 +115,7 @@ if [[ "$PACKAGE" != "" ]]; then
   echo "==> Generating SHA256..."
   for F in $(find ./pkg -mindepth 1 -maxdepth 1 -type f); do
     FILENAME=$(basename ${F})
-    # Need to make this portable
-    shasum256 "./pkg/${FILENAME}" >> ./pkg/SHASUM256.txt
-    #shasum -a 256 "./pkg/${PACKAGE}-${OSARCH}" >> ./pkg/SHASUM256.txt
+    shasum256 "./pkg/${FILENAME}" >> ./pkg/SHA256SUM.txt
   done
 
   cat ./pkg/SHASUM256.txt
