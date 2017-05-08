@@ -10,6 +10,7 @@ EXTERNAL_TOOLS=\
 	github.com/axw/gocov/gocov \
 	gopkg.in/matm/v1/gocov-html \
 	github.com/golang/lint/golint \
+	go get github.com/tebeka/go2xunit \
 	github.com/ugorji/go/codec/codecgen
 
 GOOS := $(shell go env GOOS)
