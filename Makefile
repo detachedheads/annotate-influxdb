@@ -1,4 +1,4 @@
-.PHONY: build build-local build-all clean docker-build docker-build-all docker-test-coverage docker-test-unit .docker-prep tag-version test-coverage test-unit tools version version-bump
+.PHONY: build clean docker-build docker-test-coverage docker-test-unit .docker-prep tag-version test-coverage test-unit tools version version-bump
 
 BUILD_IMAGE=golang:1.8.1
 COVERAGE_DIR=./$(DOCS_DIR)/coverage
@@ -22,14 +22,8 @@ UNIT_DIR=./$(DOCS_DIR)/unit
 VERSION_FILE := "VERSION"
 VERSION := $(shell cat $(VERSION_FILE))
 
-build: build-local
-
-build-all:
+build:
 	@scripts/build.sh
-
-build-local:
-	@go build -o ./bin/$(PACKAGE)
-	@chmod 755 ./bin/$(PACKAGE);
 
 clean:
 	@rm -rf bin pkg
@@ -39,11 +33,11 @@ docker-build: .docker-prep
 	@docker run --rm \
 		-v "$$PWD":/go/src/$(PACKAGE_PATH) \
 		-w /go/src/$(PACKAGE_PATH) \
+		-e GENERATE_PACKAGES \
 		-e LOCAL_TARGET=$(LOCAL_TARGET) \
-		-e PACKAGE \
 		-e TARGETS \
 		$(BUILD_IMAGE) \
-		make build-all
+		make build
 	
 .docker-prep:
 	@echo "==> Pulling $(BUILD_IMAGE)..."
@@ -98,7 +92,7 @@ tools:
 		go get $$tool; \
 	done
 
-travis: test-unit build-all
+travis: test-unit build
 
 version:
 	@if [ -e $(VERSION_FILE) ]; then \

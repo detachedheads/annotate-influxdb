@@ -12,7 +12,7 @@ script:
 - make travis
 
 before_deploy:
-- TARGETS=release make build-all
+- GENERATE_PACKAGES=1 TARGETS=release make build
 
 deploy:
   provider: releases
