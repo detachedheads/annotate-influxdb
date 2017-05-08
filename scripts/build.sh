@@ -25,6 +25,14 @@ rm -rf bin/*
 mkdir -p bin
 mkdir -p pkg
 
+shasum256() {
+  if hash sha256sum 2>/dev/null; then
+    sha256sum "$@"
+  else
+    shasum -a 256 "$@" 
+  fi
+}
+
 #
 # Compile Configuration
 #
@@ -110,10 +118,11 @@ if [[ "$PACKAGE" != "" ]]; then
   done
 
   echo "==> Generating SHA256..."
-  for PLATFORM in $(find ./pkg -mindepth 1 -maxdepth 1 -type f); do
-    OSARCH=$(basename ${PLATFORM})
+  for F in $(find ./pkg -mindepth 1 -maxdepth 1 -type f); do
+    FILENAME=$(basename ${F})
     # Need to make this portable
-    shasum -a 256 "./pkg/${PACKAGE}-${OSARCH}" >> ./pkg/SHASUM256.txt
+    shasum256 "./pkg/${FILENAME}" >> ./pkg/SHASUM256.txt
+    #shasum -a 256 "./pkg/${PACKAGE}-${OSARCH}" >> ./pkg/SHASUM256.txt
   done
 
   cat ./pkg/SHASUM256.txt
