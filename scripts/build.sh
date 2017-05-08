@@ -52,7 +52,7 @@ targets="$LOCAL_TARGET"
 # If we are building for release change targets based off of environment
 if [[ "$TARGETS" == "release" ]]; then
   if [[ $(uname) == "Linux" ]]; then
-    targets="darwin_amd64 linux_amd64 linux_amd64-lx windows_amd64"
+    targets="darwin_amd64 linux_amd64 linux_amd64-lxc windows_amd64"
   elif [[ $(uname) == "Darwin" ]]; then
     targets="darwin_amd64 linux_amd64 linux_amd64-lxc"
   else
@@ -103,7 +103,7 @@ for F in $(find ./pkg/${LOCAL_TARGET} -mindepth 1 -maxdepth 1 -type f); do
 done
 
 # Package up the artifacts
-if [[ "$PACKAGE" != "" ]]; then
+if [[ "$GENERATE_PACKAGES" != "" ]]; then
   for PLATFORM in $(find ./pkg -mindepth 1 -maxdepth 1 -type d); do
     OSARCH=$(basename ${PLATFORM})
     echo "==> Packaging ${OSARCH}"
@@ -117,6 +117,6 @@ if [[ "$PACKAGE" != "" ]]; then
     FILENAME=$(basename ${F})
     shasum256 "./pkg/${FILENAME}" >> ./pkg/SHA256SUM.txt
   done
-
-  cat ./pkg/SHASUM256.txt
+  echo
+  cat ./pkg/SHA256SUM.txt
 fi
