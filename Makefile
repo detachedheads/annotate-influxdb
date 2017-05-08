@@ -23,12 +23,12 @@ VERSION := $(shell cat $(VERSION_FILE))
 
 build: build-local
 
+build-all:
+	@scripts/build.sh
+
 build-local:
 	@go build -o ./bin/$(PACKAGE)
 	@chmod 755 ./bin/$(PACKAGE);
-
-build-all:
-	@scripts/build.sh
 
 clean:
 	@rm -rf bin pkg
@@ -97,6 +97,8 @@ tools:
 		go get $$tool; \
 	done
 
+travis: test-unit build-all
+
 version:
 	@if [ -e $(VERSION_FILE) ]; then \
 		ver=`cat $(VERSION_FILE)`; \
@@ -118,3 +120,11 @@ version-bump:
 		echo "No version file found"; \
 		exit 1; \
 	fi;
+
+vet:
+	@go vet $$(go list ./... | grep -v vendor/) ; if [ $$? -eq 1 ]; then \
+		echo ""; \
+		echo "Vet found suspicious constructs. Please check the reported constructs"; \
+		echo "and fix them if necessary before submitting the code for review."; \
+		exit 1; \
+	fi
