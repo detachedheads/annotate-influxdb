@@ -1,11 +1,31 @@
 dist: trusty
 sudo: false
 language: go
+
 go:
-  - 1.8.x
+- 1.8.x
 
 install:
-  - make tools
+- make tools
 
 script:
-  - make travis
+- make travis
+
+before_deploy:
+- TARGETS=release make build-all
+
+deploy:
+  provider: releases
+  api_key:
+    secure: VKFMS73JMxs85Udmu/CtcXpaElKHcywIfaMvwzGGKw3o8HyuJIudpup1icKs29ujz7fgEf9BEzXZrjTuZ0I2eKLevBt76DfDV5ZAzmdMw652bIsM2dqk0VaOXJFK/fNNOL4+zxjEBHKKRtqfw10TQMVx60m14CGYWfii6Ids6QxQtrGE6iVCykJvryE7UDXqIC2L+MmdeCEAfeoHb4cuyzoqa5znHkVFv7iPclqerpUPYKaZN0Ny1qLrdhtOqi8/+Se4j+GoOndJDjujF8kB1aFOHM1i3cAO2vkuMBiAVD5aeyc33HthlysjzYEnHwzoT16shIki/EwklI4AmVlBK1VRcArsF/eE2lU4JEwcCQYe2kjhw98V9V2TIqfqeiBcesC3008GUzw1QGN0pm/0CO21Vvo3aAd9WbBPmuer7LFUeLIxBo1wE5WTxcGxKN41PHiSEj4eCV8dz1zHWI2lidexAlS4NHg7PAy4yXEyjXP9BQqQZCCVCBDm9PaQeVLGmK/nL5O0YnVTjZr1ZXEZJTjaX+3BsNAjrg61XqDJ4OWSsFwo6Bzmn0rnxS3NvM8MHrQ6dmafCuSDpc/O+KhdGyaiUSzpDwogfHn9NLymrhbbUHwm36FsQqz4gAtAc1UNyrhYxkJDcxcGF0GWfdvcitHMNVn1cTeO/gz76gq+MtE=
+  files:
+    - "pkg/annotate-influxdb-darwin_amd64.tar.gz"
+    - "pkg/annotate-influxdb-linux_amd64-lxc.tar.gz"
+    - "pkg/annotate-influxdb-linux_amd64.tar.gz"
+    - "pkg/annotate-influxdb-windows_amd64.tar.gz"
+    - "pkg/SHA256SUM.txt"
+  skip_cleanup: true
+  overwrite: false
+  on:
+    tags: true
+    repo: detachedheads/annotate-influxdb
