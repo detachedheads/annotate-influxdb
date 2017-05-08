@@ -110,6 +110,7 @@ if [[ "$GENERATE_PACKAGES" != "" ]]; then
     pushd $PLATFORM >/dev/null 2>&1
     tar czvf ../${PACKAGE}-${OSARCH}.tar.gz ./* >/dev/null
     popd >/dev/null 2>&1
+    rm -rf $PLATFORM >/dev/null
   done
 
   echo "==> Generating SHA256..."
