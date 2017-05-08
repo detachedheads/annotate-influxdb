@@ -70,7 +70,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.annotate-influxdb.yaml)")
 	
 	// Version Flag
-	RootCmd.PersistentFlags().Bool("version", true, "Use Viper for configuration")
+	RootCmd.PersistentFlags().Bool("version", false, "Use Viper for configuration")
 	viper.BindPFlag("version", RootCmd.PersistentFlags().Lookup("version"))
 
 	// InfluxDB Related Flags
@@ -134,11 +134,10 @@ func GetInfluxDBClient(host string) (influxdb.Client, error) {
 
 // rootCmdPreRun
 func rootCmdPreRun() {
-	if viper.IsSet("version") {
+	if viper.IsSet("version") && viper.GetBool("version") {
 		fmt.Printf("%s-%s\n", VERSION, GITCOMMIT)
 		os.Exit(0)
 	}
-
 
 	// Make sure the required arguments are provided
 	if viper.IsSet("influxdb.url") && viper.GetString("influxdb.url") == "" {
@@ -154,7 +153,7 @@ func rootCmdRun() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//defer client.Close()
+	defer client.Close()
 
 	// Create a new point batch
 	bp, err := influxdb.NewBatchPoints(influxdb.BatchPointsConfig{
