@@ -62,9 +62,22 @@ influxdb:
     - 'tag1'
     - 'tag2'
 ```
+
+The following is an example of utilizing a configuration file that specifies the url, database and measurement and command line arguments to provide the event annotation.
+
+```shell
+$ annotate-influxdb --config "/etc/annotate-influxdb/production-events.yml" --title 'Production Deployment' --description 'Some application has been deployed to Production!' --tag production --tag someapplication
+```
+
+
 [docker]: https://www.docker.com
 [docker-compose]: https://docs.docker.com/compose/
 [docker-golang]: https://hub.docker.com/_/golang/
 [github-releases]: https://github.com/detachedheads/annotate-influxdb/releases
 [go]: https://www.golang.org/
 [influxdb-tags]: https://docs.influxdata.com/influxdb/v1.2/concepts/glossary/#tag
+
+[release-url]: https://github.com/detachedheads/annotate-influxdb/releases/latest
+[release-image]: https://img.shields.io/github/release/detachedheads/annotate-influxdb.svg
+[travis-url]: https://travis-ci.org/detachedheads-annotate-influxdb
+[travis-image]: https://travis-ci.org/detachedheads/annotate-influxdb.svg?branch=master
