@@ -37,7 +37,7 @@ docker-build: .docker-prep
 		-e LOCAL_TARGET=$(LOCAL_TARGET) \
 		-e TARGETS \
 		$(BUILD_IMAGE) \
-		make build
+		make tools build
 	
 .docker-prep:
 	@echo "==> Pulling $(BUILD_IMAGE)..."
