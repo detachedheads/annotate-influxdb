@@ -78,9 +78,10 @@ To ease the entry of building `annotate-influxdb` there are two methods supporte
 You will first want to check out this repository into your GOPATH:
 
 ```script
-$ mkdir -p "$GOPATH/src/github.com/detachedheads/annotate-influxdb"
-$ cd "$GOPATH/src/github.com/detachedheads/annotate-influxdb"
+$ mkdir -p "$GOPATH/src/github.com/detachedheads"
+$ cd "$GOPATH/src/github.com/detachedheads"
 $ git clone https://github.com/detachedheads/annotate-influxdb.git
+$ cd annotate-influxdb
 ```
 
 To compile a version of annotate-influxdb for your local machine you can run:
@@ -110,9 +111,10 @@ Using a local Docker environment for building runs the exact same commands as lo
 To leverage the docker build environment you will first want to check out this repository into a directory of your choice.  In the example below there is an environment variable named `DEVELOPMENT` where all development files are stored.
 
 ```script
-$ mkdir -p "$DEVELOPMENT/detachedheads/annotate-influxdb"
-$ cd "$DEVELOPMENT/detachedheads/annotate-influxdb"
+$ mkdir -p "$DEVELOPMENT/detachedheads"
+$ cd "$DEVELOPMENT/detachedheads"
 $ git clone https://github.com/detachedheads/annotate-influxdb.git
+$ cd annotate-influxdb
 ```
 
 To compile a version of annotate-influxdb for your local machine you can run:
@@ -141,7 +143,6 @@ $ make docker-test-coverage
 [github-releases]: https://github.com/detachedheads/annotate-influxdb/releases
 [go]: https://www.golang.org/
 [influxdb-tags]: https://docs.influxdata.com/influxdb/v1.2/concepts/glossary/#tag
-
 [release-url]: https://github.com/detachedheads/annotate-influxdb/releases/latest
 [release-image]: https://img.shields.io/github/release/detachedheads/annotate-influxdb.svg
 [travis-url]: https://travis-ci.org/detachedheads-annotate-influxdb
