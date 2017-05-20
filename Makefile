@@ -82,7 +82,7 @@ test-coverage:
 
 test-unit:
 	@mkdir -p $(UNIT_DIR)
-	@go test -v -parallel=5 $$(go list ./... | grep -v vendor/ | grep -v mock) | tee $(UNIT_DIR)/test.out
+	@go test -v $$(go list ./... | grep -v vendor/ | grep -v mock) | tee $(UNIT_DIR)/test.out
 	@go2xunit -fail -input $(UNIT_DIR)/test.out -output $(UNIT_DIR)/xunit.xml
 	@rm $(UNIT_DIR)/test.out
 
