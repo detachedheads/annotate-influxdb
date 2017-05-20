@@ -69,6 +69,71 @@ The following is an example of utilizing a configuration file that specifies the
 $ annotate-influxdb --config "/etc/annotate-influxdb/production-events.yml" --title 'Production Deployment' --description 'Some application has been deployed to Production!' --tag production --tag someapplication
 ```
 
+## Development
+
+To ease the entry of building `annotate-influxdb` there are two methods supported by the local Makefile.  The first is for a fully installed and configured [Go][go] (version 1.8+) environment on your machine, and the second requires only that docker be installed.
+
+### Local Go Environment
+
+You will first want to check out this repository into your GOPATH:
+
+```script
+$ mkdir -p "$GOPATH/src/github.com/detachedheads/annotate-influxdb"
+$ cd "$GOPATH/src/github.com/detachedheads/annotate-influxdb"
+$ git clone https://github.com/detachedheads/annotate-influxdb.git
+```
+
+To compile a version of annotate-influxdb for your local machine you can run:
+
+```script
+$ make
+```
+
+This will generate a binary within the ./bin directory of the project.
+
+To run the unit tests:
+
+```script
+$ make test-unit
+```
+
+To run the unit tests with coverage reports:
+
+```script
+$ make test-coverage
+```
+
+### Local Docker Environment
+
+Using a local Docker environment for building runs the exact same commands as local development, they just happen to be run inside of the container.
+
+To leverage the docker build environment you will first want to check out this repository into a directory of your choice.  In the example below there is an environment variable named `DEVELOPMENT` where all development files are stored.
+
+```script
+$ mkdir -p "$DEVELOPMENT/detachedheads/annotate-influxdb"
+$ cd "$DEVELOPMENT/detachedheads/annotate-influxdb"
+$ git clone https://github.com/detachedheads/annotate-influxdb.git
+```
+
+To compile a version of annotate-influxdb for your local machine you can run:
+
+```script
+$ make docker-build
+```
+
+This will generate a binary within the ./bin directory of the project.
+
+To run the unit tests:
+
+```script
+$ make docker-test-unit
+```
+
+To run the unit tests with coverage reports:
+
+```script
+$ make docker-test-coverage
+```
 
 [docker]: https://www.docker.com
 [docker-compose]: https://docs.docker.com/compose/
